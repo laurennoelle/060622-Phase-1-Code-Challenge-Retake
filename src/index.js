@@ -5,9 +5,11 @@ const filmListElement = document.getElementById('films');
 const filmTitle = document.getElementsByClassName('film-item');
 const ticketNum = document.getElementById('ticket-num');
 const filmPoster = document.getElementById('poster')
-const filmName = document.getElementById('film-title')
+const filmName = document.getElementById('title')
 const filmRuntime = document.getElementById('runtime')
 const filmShowTime = document.getElementById('showtime')
+const filmDescription = document.getElementById('film-info')
+
 
 
 fetch('http://localhost:3000/films/1')
@@ -20,10 +22,11 @@ function renderfirstFilm(data) {
     const cardMovie = document.getElementById('card')
     filmPoster.src = data.poster;
     filmName.textContent = data.title;
+    filmDescription.textContent = data.description;
     filmRuntime.textContent = data.runtime;
     filmShowTime.textContent = data.showtime;
-    ticketNum.textContent = `${data.capacity - tickets_sold} remaining tickets `;
-    filmShowTime.append(cardMovie)
+    ticketNum.textContent = `${data.capacity - data.tickets_sold} remaining tickets `;
+    
 };
 
 
@@ -35,17 +38,20 @@ fetch(flatdangoApi)
 .then(renderFilms);
 
 function renderFilms (films) {
+    console.log(films)
     films.forEach(renderTitle);
 }
 
 function renderTitle (filmObj) {
-    filmTitle.textContent = filmObj.title;
-    filmListElement.append(filmTitle);
+    const li = document.createElement('li')
+    li.textContent = filmObj.title;
+    filmListElement.append(li);
 }
 
 
 // 3. Buy a ticket for a movie. After clicking the "Buy Ticket" button, I should see the number of available tickets decreasing on the frontend. I should not be able to buy a ticket if the showing is sold out (if there are 0 tickets available).
     //Write an if...else statement?
+    //if remaining tickets were <= 0 then ticketNum.textContent.sold out 
 
 const buyTicketButton = document.getElementById('buy-ticket')
 
@@ -53,6 +59,12 @@ buyTicketButton.addEventListener('click', buyTicket);
 
 function buyTicket() {
     const ticketSubtraction = parseInt(ticketNum.textContent.split(" ")[0]);
-    ticketNum.textContent =`${ticketSubtraction - 1} remaining tickets`;
+    if (ticketSubtraction === 0) {
+        ticketNum.textContent = "Sold Out"
+    } else {
+        ticketNum.textContent =`${ticketSubtraction - 1} remaining tickets`;
+        
+    }
+
     
 }
