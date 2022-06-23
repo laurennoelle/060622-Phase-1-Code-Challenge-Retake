@@ -9,15 +9,21 @@ const filmName = document.getElementById('film-title')
 const filmRuntime = document.getElementById('runtime')
 const filmShowTime = document.getElementById('showtime')
 
-fetch(flatdangoApi)
+
+fetch('http://localhost:3000/films/1')
 .then(res => res.json())
 .then(renderfirstFilm);
 
+//need to append showing info to the div #card for stuff to appear on page
 function renderfirstFilm(data) {
+    const showingInfo = document.getElementById('showing')
+    const cardMovie = document.getElementById('card')
     filmPoster.src = data.poster;
     filmName.textContent = data.title;
     filmRuntime.textContent = data.runtime;
     filmShowTime.textContent = data.showtime;
+    ticketNum.textContent = `${data.capacity - tickets_sold} remaining tickets `;
+    filmShowTime.append(cardMovie)
 };
 
 
